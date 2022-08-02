@@ -1,0 +1,550 @@
+<html>
+
+<head>
+<meta name="description" content="Die2Nite Dehydration Guide" />
+<title>Zombie Survival Almanac</title>
+<meta name="keywords" content="die2nite, annette, die2nite, dehydration, thirst, guide" />
+<meta name="author" content="" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<style type="text/css">
+body p {
+	font-size: 12px;
+	font-family: Verdana, Geneva, sans-serif;
+}
+</style>
+<script type="text/javascript">
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+</script>
+<link rel="shortcut icon" href="favicon.ico" type="image/ico">
+</head>
+<body bgcolor="#000000" background="swatch-content.gif" text="#FFFFFF" link="#FF9900" vlink="#FF6600" onLoad="MM_preloadImages('toc_2.png')">
+<p>&nbsp;</p>
+<table width="950" border="1" align="center" cellpadding="10" cellspacing="0">
+  <tr>
+    <td align="center" valign="top" bgcolor="#000000"><p><a href="index-2.html"><img src="zombie_survival_almanac_header_attackspreadcalc.png" alt="" border="0"></a></p>
+      <p>&nbsp;</p>
+      <table width="800">
+        <tr>
+          <td align="left" valign="top">
+          
+          <script>
+
+   
+
+   function calculate() {
+
+       var samples = 0;
+       var documentForm = document.forms["calculateForm"];
+       var citizenNumber = parseInt(documentForm.citizens.value);
+       var zombieNumber = parseInt(documentForm.zombies.value);
+       var citizenDef = new Array(citizenNumber);
+       var citizenDeaths = new Array(citizenNumber);
+       var numberOfDeaths = new Array(citizenNumber + 1);
+  
+       // Clean previous results
+       for (var i = 0; i < 25; i++) {
+           eval("documentForm.prob" + i + ".value = ''");
+           eval("documentForm.deaths" + i + ".value = ''");
+       }
+       eval("documentForm.deaths25.value = ''");
+
+       // fill citizens array
+       for (var i = 0; i < citizenNumber; i++) {
+          eval("citizenDef[" + i + "] = documentForm.def" + i + ".value");
+          citizenDeaths[i] = 0;
+          numberOfDeaths[i] = 0;
+       }
+       numberOfDeaths[citizenNumber] = 0;
+       // Add citizens to a list, first one time, second two times, etc 
+       var citizenList = [];
+       for (var j = 0; j < citizenNumber; j++) {
+           for (var k = 0; k < (j+1); k++) {
+               citizenList.push(j);
+           }
+       }
+
+       // Array for the number of attacks per citizen
+       var attacks = new Array(citizenNumber);
+       
+       for (var i = 0; i < 100000; i++) {
+           // Initialize attacks
+           for (var j = 0; j < citizenNumber; j++) {
+               attacks[j] = 0;
+           }
+           
+           for (var j = 0; j < zombieNumber; j++) {
+               // Get the citizen which will get the attack
+               var rnd = parseInt(Math.random() * citizenList.length);
+               var x = citizenList[rnd];
+               attacks[x]++;
+           }
+           
+           // ok now we have an ordered attack distribution, shuffle the array before
+           // applying to the citizens
+           shuffle(attacks);
+           // Final step, check which citizens are boned
+           var deaths = 0;
+           for (var j = 0; j < citizenNumber; j++) {
+              if (attacks[j] > citizenDef[j]) {
+                 citizenDeaths[j]++;
+                 deaths++;
+              }
+           }
+           numberOfDeaths[deaths]++;
+           samples++;
+       }
+       
+       // We have the number of deaths of each citizen and the samples... so just
+       // calculate the probability
+       for (var i = 0; i < citizenNumber; i++) {
+           eval("documentForm.prob" + i + ".value = " + (100 - (citizenDeaths[i] * 100 / samples)));
+           eval("documentForm.deaths" + i + ".value = " + (numberOfDeaths[i] * 100 / samples));
+       }
+       eval("documentForm.deaths" + citizenNumber + ".value = " + (numberOfDeaths[citizenNumber] * 100 / samples));
+   }
+   
+   shuffle = function(o){
+	    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+	    return o;
+   };
+</script>
+          
+          
+          <p><strong>Attack Spread Calculator</strong></p>
+          
+          <form name="calculateForm" action="#">
+<p>
+<b>Number of citizens: </b><input name="citizens" size="2" value="10" type="text">
+</p><p>
+<b>Attack zeds: </b><input name="zombies" size="3" value="150" type="text"> (Overflow not counting lazy zombies)</p>
+<div style="padding-left: 12px; font-style: italic" >
+<p>
+Note: The attack zeds follow this simple formula that reflects the number of citizen inside and the day of overflow:<br>
+<br>
+Attack zeds = (day + x)*y,<br> 
+<br>
+where,<br>
+<br>
+day=day of overflow<br>
+<br>
+x=1 for d6 to d14<br> 
+x=4 for d15 to d18<br>
+x=5 for d19 to d23<br>
+x=6 for d24 or higher<br>
+<br>
+y=10 if citizen # in town is 10 or less<br> 
+y=citizen # if citizen # in town is 11 to 25.<br>
+<br>
+The formula does not work if citizen # is greater than 25 and if day is 5 or less.<br> 
+<br>
+If the overflow zed is greater than the predicted attack zed, then the 
+difference becomes the lazy zed seen for that day. If the overflow zed 
+is less than the predicted attack zed, then there will be no lazy zed, 
+ie., all overflow zed will attack.<br>
+<br>
+</p>
+</div>
+<table style="border-spacing:5px 1px;">
+<tbody><tr>
+  <td><p><b>Names</b></p></td><td><p><b>Home defense</b></p></td><td><p><b>Survive prob</b></p></td>
+  <td colspan="2"><p><b>Total deaths</b></p></td>
+  </tr>
+<tr><td><p>Citizen #1</p></td>
+    <td><p>
+      <input name="def0" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob0" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>0 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths0" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #2</p></td>
+    <td><p>
+      <input name="def1" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob1" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>1 death: &nbsp;</p></td>
+    <td><p><input name="deaths1" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #3</p></td>
+    <td><p>
+      <input name="def2" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob2" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>2 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths2" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #4</p></td>
+    <td><p>
+      <input name="def3" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob3" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>3 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths3" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #5</p></td>
+    <td><p>
+      <input name="def4" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob4" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>4 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths4" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #6</p></td>
+    <td><p>
+      <input name="def5" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob5" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>5 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths5" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #7</p></td>
+    <td><p>
+      <input name="def6" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob6" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>6 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths6" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #8</p></td>
+    <td><p>
+      <input name="def7" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob7" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>7 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths7" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #9</p></td>
+    <td><p>
+      <input name="def8" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob8" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>8 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths8" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #10</p></td>
+    <td><p>
+      <input name="def9" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob9" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>9 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths9" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #11</p></td>
+    <td><p>
+      <input name="def10" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob10" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>10 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths10" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #12</p></td>
+    <td><p>
+      <input name="def11" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob11" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>11 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths11" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #13</p></td>
+    <td><p>
+      <input name="def12" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob12" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>12 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths12" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #14</p></td>
+    <td><p>
+      <input name="def13" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob13" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>13 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths13" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #15</p></td>
+    <td><p>
+      <input name="def14" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob14" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>14 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths14" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #16</p></td>
+    <td><p>
+      <input name="def15" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob15" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>15 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths15" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #17</p></td>
+    <td><p>
+      <input name="def16" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob16" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>16 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths16" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #18</p></td>
+    <td><p>
+      <input name="def17" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob17" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>17 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths17" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #19</p></td>
+    <td><p>
+      <input name="def18" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob18" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>18 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths18" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #20</p></td>
+    <td><p>
+      <input name="def19" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob19" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>19 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths19" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #21</p></td>
+    <td><p>
+      <input name="def20" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob20" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>20 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths20" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #22</p></td>
+    <td><p>
+      <input name="def21" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob21" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>21 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths21" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #23</p></td>
+    <td><p>
+      <input name="def22" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob22" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>22 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths22" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #24</p></td>
+    <td><p>
+      <input name="def23" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob23" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>23 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths23" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>Citizen #25</p></td>
+    <td><p>
+      <input name="def24" size="2" value="10" type="text">
+    </p></td>
+    <td><p>
+      <input name="prob24" size="3" readonly="true" type="text">
+    </p></td>
+    <td><p>24 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths24" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+<tr><td><p>&nbsp;</p></td>
+    <td><p>&nbsp;</p></td>
+    <td><p>&nbsp;</p></td>
+    <td><p>25 deaths:
+      
+    </p></td>
+    <td><p>
+      <input name="deaths25" size="3" readonly="true" type="text">
+    </p></td>
+</tr>
+</tbody>
+</table>
+<input class="button2" type="button" onClick="calculate();" value="Calculate!" style="font-size:110%;"/>
+</form>
+          
+          
+          <p>Thanks to tamle, fodgycakes, Annette, and others for insights into the Attack zeds formula, and special thanks to the d2n community for sharing overflow data to make this calculator possible. Spread formula and calculator code by freddy.</p></td>
+        </tr>
+      </table>
+      </p>
+      <p><a href="index-2.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('table of contents','','toc_2.png',1)"><img src="toc_1.png" alt="table of contents" name="table of contents" width="259" height="68" border="0"></a> </p>
+      <p>        Most images are © Motion-Twin. Zombie Survival Almanac is not affiliated with Motion-Twin.<br>
+        <br>
+    <a href= "mailto:annette.die2nite@gmail.com" >annette.die2nite@gmail.com</a></p>
+    <p>&nbsp;</p></td>
+  </tr>
+
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html> 
