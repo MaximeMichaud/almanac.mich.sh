@@ -1,0 +1,1 @@
+# almanac.mich.sh
